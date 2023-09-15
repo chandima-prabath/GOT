@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Button from "../components/Button";
 
 const Welcome = () => {
   const navigation = useNavigation();
@@ -84,6 +83,7 @@ const Welcome = () => {
           ))}
         </ScrollView>
         <ScrollView style={styles.detailedView}>
+          <View style={styles.detailedViewContaner}>
           {selectedCharacter && (
             <View style={styles.detailedCharacter}>
               <Image
@@ -94,13 +94,32 @@ const Welcome = () => {
                 {selectedCharacter.title}
               </Text>
               <View style={styles.textContainer}>
-                <Text style={styles.title}>Name </Text>
+                <Text style={styles.title}>Full Name</Text>
                 <Text style={styles.characterName}>
                   {selectedCharacter.fullName}
                 </Text>
               </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>First Name</Text>
+                <Text style={styles.characterName}>
+                  {selectedCharacter.firstName}
+                </Text>
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>Last Name</Text>
+                <Text style={styles.characterName}>
+                  {selectedCharacter.lastName}
+                </Text>
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>Family</Text>
+                <Text style={styles.characterName}>
+                  {selectedCharacter.family}
+                </Text>
+              </View>
             </View>
           )}
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -116,7 +135,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 20,
+    paddingTop: 35,
+    paddingBottom:5,
     paddingHorizontal: 10,
   },
   searchInput: {
@@ -143,15 +163,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "800",
     marginLeft: 10,
+    top:-12,
+    paddingHorizontal:5,
+    backgroundColor:"#2A2A2A"
   },
   textContainer:{
+    marginVertical:10,
+    top:10,
     borderWidth:2,
     borderColor:"gray",
     borderRadius:20,
     alignItems:"center",
     justifyContent:"center",
     padding:3,
-    maxWidth:"100%",
+    minWidth:150,
+    height:50
   },
   content: {
     flex: 1,
@@ -180,6 +206,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     marginLeft: 10,
+    top:-10,
   },
   characterListName: {
     color: "white",
@@ -198,9 +225,14 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: "#2A2A2A",
   },
+  detailedViewContaner:{    
+    justifyContent:"center",
+    marginVertical:"60%"
+
+  },
   detailedCharacter: {
     alignItems: "center",
-    padding: 20,
+    paddingVertical: 20,
   },
 });
 

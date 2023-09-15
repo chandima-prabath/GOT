@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../components/Button";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import auth from "../../firebaseConfig";
 
 const Profile = () => {
   const navigation = useNavigation();
-  const [name, setName] = useState("Example Application");
-  const [email, setEmail] = useState("example@app.com");
+  const [name, setName] = useState(""); // State to store the user's name
+  const [email, setEmail] = useState(""); // State to store the user's email
+
+  // Function to fetch and update the user's name and email from Firebase
+  const fetchUserData = async () => {
+    try {
+      const user = auth.currentUser; // Get the current user
+
+      if (user) {
+        // User is signed in
+        setName(user.displayName || ""); // Set the user's name if available
+        setEmail(user.email || ""); // Set the user's email if available
+      } else {
+        // User is not signed in, handle accordingly
+        // For example, navigate to the SignIn screen
+        navigation.navigate("SignIn");
+      }
+    } catch (error) {
+      // Handle any errors here
+      Alert.alert("Error", error.message);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch user data when the component mounts
+    fetchUserData();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -77,6 +101,7 @@ const Profile = () => {
 };
 
 export default Profile;
+
 
 
 const styles = StyleSheet.create({

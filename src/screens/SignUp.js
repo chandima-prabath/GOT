@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../components/Button";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import FloatingLabelPassword from "../components/FloatingLabelPassword";
-import { createUserWithEmailAndPassword  } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import auth from "../../firebaseConfig";
 
 const SignUp = () => {
@@ -103,7 +103,17 @@ const SignUp = () => {
       }
 
       // Create user with email and password
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // Get the newly created user
+      const user = userCredential.user;
+
+      // Update the user's display name (name)
+      await updateProfile(user, { displayName: name });
 
       // If successful, navigate to the main app screen
       navigation.navigate("Welcome");
@@ -164,6 +174,7 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
 
 const styles = StyleSheet.create({
   container: {
