@@ -61,11 +61,15 @@ export default function App() {
         <Stack.Navigator initialRouteName="Welcome">
           <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
           <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+          <AuthStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
+          <AuthStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
         </Stack.Navigator>
       ) : (
         <AuthStack.Navigator initialRouteName="SignIn">
           <AuthStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
           <AuthStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+          <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
+          <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
         </AuthStack.Navigator>
       )}
     </NavigationContainer>
