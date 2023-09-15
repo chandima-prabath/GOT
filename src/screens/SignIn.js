@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../components/Button";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import FloatingLabelPassword from "../components/FloatingLabelPassword";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth modules
+import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebaseConfig";
+import * as SecureStore from "expo-secure-store"; // Import SecureStore
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -15,14 +16,27 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password); // Sign in with email and password
+      await signInWithEmailAndPassword(auth, email, password);
 
-      // If successful, navigate to the main app screen
+      // If successful, store user authentication status in SecureStore
+      await SecureStore.setItemAsync("userToken", "authenticated");
+
       navigation.navigate("Welcome");
     } catch (error) {
       Alert.alert("Error", error.message);
     }
   };
+
+  useEffect(() => {
+    const checkAuthenticationStatus = async () => {
+      const userToken = await SecureStore.getItemAsync("userToken");
+      if (userToken === "authenticated") {
+        navigation.navigate("Welcome");
+      }
+    };
+
+    checkAuthenticationStatus();
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -59,6 +73,7 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
 
 
 const styles = StyleSheet.create({

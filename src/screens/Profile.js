@@ -1,24 +1,41 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Alert } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../components/Button";
 import FloatingLabelInput from "../components/FloatingLabelInput";
+import auth from "../../firebaseConfig";
 
 const Profile = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState("Example Application");
+  const [email, setEmail] = useState("example@app.com");
 
   const handleLogout = async () => {
     try {
-      // Implement Firebase authentication logic here
-      // You can use Firebase's signInWithEmailAndPassword method
-      // Example:
-      // await firebase.auth().signInWithEmailAndPassword(email, password);
-      // If successful, navigate to the main app screen
-      // You can use React Navigation for navigation
-      navigation.navigate("SignIn");
+      // Add a confirmation dialog before logging out
+      Alert.alert(
+        "Confirm Logout",
+        "Are you sure you want to log out?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Logout",
+            onPress: async () => {
+              // Implement Firebase logout
+              await auth.signOut();
+              // Clear local data (if any)
+              // ...
+              // Navigate to the SignIn screen
+              navigation.navigate("SignIn");
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       Alert.alert("Error", error.message);
     }
@@ -32,15 +49,15 @@ const Profile = () => {
           <FloatingLabelInput
             style={styles.input}
             label="Name"
-            value={email||"Example Application"}
-            onChangeText={(text) => setEmail(text)}
+            value={name}
+            onChangeText={(text) => setName(text)}
           />
         </View>
         <View style={styles.InputContainer}>
-        <FloatingLabelInput
+          <FloatingLabelInput
             style={styles.input}
             label="Email"
-            value={email||"example@app.com"}
+            value={email}
             onChangeText={(text) => setEmail(text)}
           />
         </View>
@@ -58,6 +75,9 @@ const Profile = () => {
     </View>
   );
 };
+
+export default Profile;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -113,4 +133,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
